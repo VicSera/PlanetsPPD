@@ -4,10 +4,16 @@
 
 #include "physics.h"
 
-Planet::Planet(float x, float y, float radius, float density, COLORREF color, float speedX, float speedY)
-        : x(x), y(y), radius(radius), color(color), oldX(x), oldY(y), speed({speedX, speedY})
+Planet::Planet(float x, float y, float radius, float density, float speedX, float speedY)
+        : x(x), y(y), radius(radius), oldX(x), oldY(y), speed({speedX, speedY})
 {
     this->mass = PI * radius * radius * density;
+}
+
+Planet::Planet()
+        : x(0), y(0), radius(0), oldX(0), oldY(0), speed({0, 0})
+{
+    this->mass = 0;
 }
 
 void Planet::setNewPos(float newX, float newY)
@@ -86,4 +92,14 @@ Force computeGravity(const std::vector<Planet>& planets, int planetNumber)
             forces.push_back(computeAttraction(planets[i], planets[planetNumber]));
 
     return addForces(forces);
+}
+
+bool Force::check(const Force& other) const
+{
+    return magnitude == other.magnitude && dirX == other.dirX && dirY == other.dirY;
+}
+
+void Force::print() const
+{
+    std::cout << "(" << dirX << ", " << dirY << ", " << magnitude << ")";
 }

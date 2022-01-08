@@ -3,6 +3,7 @@
 //
 
 #include "graphics.h"
+#include <iostream>
 
 void drawCircle(const Planet& p, HDC hdc, HWND hwnd)
 {
