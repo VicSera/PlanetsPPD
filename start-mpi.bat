@@ -1,1 +1,1 @@
-mpiexec.exe -np 1 "C:\programming\PlanetsPPD\cmake-build-debug\Planets-mpi.exe"
+mpiexec.exe -np 3 "C:\programming\PlanetsPPD\cmake-build-debug\Planets-mpi.exe"

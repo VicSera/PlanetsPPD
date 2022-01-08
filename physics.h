@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <cmath>
 #include <vector>
+#include <iostream>
 
 #define PI 3.14f
 #define G 0.0001f
@@ -20,9 +21,9 @@ struct Planet
     float radius;
     float mass;
     Vector2 speed;
-    COLORREF color;
 
-    Planet(float x, float y, float radius, float density, COLORREF color, float speedX, float speedY);
+    Planet(float x, float y, float radius, float density, float speedX, float speedY);
+    Planet();
 
     void setNewPos(float newX, float newY);
 };
@@ -34,6 +35,10 @@ struct Force
     Force(float dirX, float dirY, float magnitude);
 
     Force();
+
+    [[nodiscard]] bool check(const Force& other) const;
+
+    void print() const;
 };
 
 Vector2 computeAcceleration(const Planet& p, const Force& f);
