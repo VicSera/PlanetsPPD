@@ -4,9 +4,12 @@
 #include "ThreadPool.h"
 #include <binders.h>
 #include <functional>
+#include <fstream>
 
 #define FRAMERATE 60
 #define NUM_THREADS 10
+
+std::ofstream out("main-threads-logs.txt");
 
 [[noreturn]] void mainLoop(HWND console, HDC device, ThreadPool& pool)
 {
@@ -27,6 +30,7 @@
 
     while (true)
     {
+        auto const beginTime = std::chrono::high_resolution_clock::now();
         pool.resetFinishedJobsCounter();
 
         // register jobs
@@ -39,6 +43,10 @@
 
         // wait for jobs to finish
         pool.unlockAfter((int)planets.size());
+
+        auto const endTime = std::chrono::high_resolution_clock::now();
+
+        out << "Loop took " << duration_cast<std::chrono::milliseconds>(endTime-beginTime).count() << "milliseconds" << std::endl;
 
         // draw updated planets
         for (auto i = 0; i < planets.size(); ++i)

@@ -1,5 +1,7 @@
 #include <iostream>
 #include <mpi.h>
+#include <chrono>
+#include <fstream>
 
 #include "graphics.h"
 
@@ -12,6 +14,8 @@
 #define TAG_FORCES 4
 
 #define VERBOSE_LOGGING true
+
+std::ofstream out("main-mpi-logs.txt");
 
 [[noreturn]] void worker(int me)
 {
@@ -84,6 +88,7 @@
 
     while (true)
     {
+        auto const beginTime = std::chrono::high_resolution_clock::now();
         // Update planet data
         for (auto process = 1; process < numProcesses; ++process)
         {
@@ -107,6 +112,10 @@
 
             MPI_Recv(&forces[startIndex], (int)sizeof(Force) * (endIndex - startIndex), MPI_BYTE, process, TAG_FORCES, MPI_COMM_WORLD, &status);
         }
+
+        auto const endTime = std::chrono::high_resolution_clock::now();
+
+        out << "Loop took " << duration_cast<std::chrono::milliseconds>(endTime-beginTime).count() << "milliseconds" << std::endl;
 
         for (auto idx = 0; idx < numPlanets; ++idx)
         {
